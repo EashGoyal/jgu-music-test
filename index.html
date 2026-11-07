@@ -1,12 +1,11 @@
 <!DOCTYPE html>
 <html>
 <head>
-<title>Slot Booking (Test)</title>
+<title>JGU Music Society (Test)</title>
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="robots" content="noindex">
 <link rel="icon" type="image/png" href="crest.png">
 <link rel="apple-touch-icon" href="crest.png">
-<base target="_top">
 <meta charset="utf-8">
 <meta name="color-scheme" content="only light">
 <meta name="author" content="Eash Goyal (24014376) and Eashan Goyal (24014377)">
@@ -304,34 +303,108 @@
   }
 </style>
 
+<style>
+  /* The central page. Only on our own domain, never served by Apps Script. */
+  .hero { color: #fff; padding: 26px 28px; overflow: hidden;
+          background: var(--stave) 0 24px / 100% 45px no-repeat,
+                      radial-gradient(420px 240px at 100% 0, rgba(184,46,80,.6), transparent 70%),
+                      linear-gradient(150deg, #8d1a38, var(--maroon-2));
+          box-shadow: 0 2px 4px rgba(92,15,36,.1), 0 22px 40px -20px rgba(92,15,36,.7); }
+  .hero small { font-size: 11px; font-weight: 600; letter-spacing: .16em; text-transform: uppercase; color: #f6c3d0; }
+  .hero h1 { font: 600 32px/1.12 var(--font); letter-spacing: -.028em; margin: 8px 0 0; }
+
+  .tiles { display: grid; grid-template-columns: repeat(2, minmax(0,1fr)); gap: 18px; margin-bottom: 18px; }
+  a.tile { display: flex; flex-direction: column; color: inherit; text-decoration: none; margin: 0; min-height: 172px;
+           transition: transform .25s var(--ease), box-shadow .25s var(--ease); }
+  a.tile:hover { transform: translateY(-3px); box-shadow: inset 0 0 0 1px #e2d2ce, var(--shadow-lift); }
+  a.tile:focus-visible { outline: 2px solid var(--rose); outline-offset: 2px; }
+  .tile-top { display: flex; align-items: center; gap: 12px; }
+  .glyph { flex: none; width: 42px; height: 42px; border-radius: 13px; display: grid; place-items: center;
+           color: #fff; background: linear-gradient(160deg, #8d1a38, var(--maroon-2)); }
+  .glyph svg { width: 22px; height: 22px; fill: none; stroke: currentColor; stroke-width: 1.8;
+               stroke-linecap: round; stroke-linejoin: round; }
+  .tile h2 { margin: 0; font-size: 20px; }
+  .tile .go-arrow { margin-left: auto; font-size: 20px; color: var(--rose); transition: transform .25s var(--ease); }
+  a.tile:hover .go-arrow { transform: translateX(4px); }
+  .tile p { margin: 12px 0 0; color: var(--mute); font-size: 13.5px; }
+  .status { margin-top: auto; padding-top: 14px; font-size: 13px; font-weight: 600; min-height: 34px; color: var(--ink); }
+  .status.good { color: var(--green); }
+  .status.mine { color: var(--rose); }
+  .status.quiet { color: var(--mute); font-weight: 500; }
+
+  .list { padding: 6px 0; }
+  .row { display: flex; align-items: center; gap: 6px 14px; flex-wrap: wrap; padding: 13px 24px; color: inherit;
+         text-decoration: none; border-bottom: 1px solid var(--line); transition: background .2s; }
+  .row:last-child { border-bottom: 0; }
+  .row:hover { background: #fcf6f3; }
+  .row .what { font-weight: 600; flex: 1 1 200px; min-width: 0; }
+  .row .what small { display: block; font-weight: 400; font-size: 12.5px; color: var(--mute); }
+  .phase { font-size: 12px; font-weight: 600; padding: 4px 11px; border-radius: 999px; white-space: nowrap; }
+  .phase.upcoming { background: #fff3d6; color: #8a5a00; }
+  .phase.open { background: var(--green-bg); color: var(--green); }
+  .phase.closed { background: var(--soft); color: var(--mute); }
+  .none { padding: 22px 24px; color: var(--mute); font-style: italic; }
+
+  .socials { display: flex; flex-wrap: wrap; gap: 8px; justify-content: center; margin-top: 26px; }
+  .socials a { font-size: 13px; font-weight: 500; color: var(--maroon); text-decoration: none; padding: 9px 16px;
+               border-radius: 999px; background: #fff; box-shadow: inset 0 0 0 1px var(--line); }
+  .socials a:hover { background: var(--rose-soft); }
+
+  @media (max-width: 640px) {
+    .hero { padding: 20px; } .hero h1 { font-size: 26px; }
+    .tiles { grid-template-columns: minmax(0,1fr); gap: 14px; }
+    a.tile { min-height: 0; }
+    .row { padding-left: 18px; padding-right: 18px; }
+  }
+</style>
 </head>
 <body>
 <header class="appbar">
   <div class="bar">
     <div class="crest" role="img" aria-label="JGU Music Society crest"></div>
-    <div class="brand"><small>JGU Music Society</small><strong>Slot Booking</strong></div>
-    <span class="pill">TEST</span><span id="adminpill" class="pill admin" hidden>ADMIN</span>
+    <div class="brand"><small>JGU</small><strong>Music Society</strong></div>
+    <span class="pill">TEST</span>
     <span class="who" id="who"></span>
   </div>
 </header>
 <main>
-  <div id="msg" class="msg" hidden></div>
-  <section id="login" class="card" hidden></section>
-  <section id="closed" class="card note" hidden>Booking opens at <b>6:00 PM</b>. You can see the slots now, but not book yet.</section>
-  <section id="mine" class="card" hidden></section>
-  <section id="live"></section>
-  <div class="legend" aria-hidden="true">
-    <span style="--c:#3aa070">Available</span><span style="--c:var(--maroon)">Booked</span>
-    <span style="--c:var(--rose)">Yours</span><span style="--c:var(--amber)">Happening now</span>
-    <span style="--c:#dccfcc">Not open</span>
-  </div>
-  <section id="snapshot" hidden></section>
-  <section id="admin" class="card" hidden></section>
-  <p class="foot" id="foot">Loading…</p>
+  <section class="card hero">
+    <small id="hello">Welcome</small>
+    <h1>What are you here for?</h1>
+  </section>
+
+  <section class="tiles">
+    <a class="card tile" href="slots.html">
+      <div class="tile-top">
+        <span class="glyph"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg></span>
+        <h2>Slot Booking</h2><span class="go-arrow" aria-hidden="true">→</span>
+      </div>
+      <p>Book the music room for your practice.</p>
+      <div class="status quiet" id="slot-status"></div>
+    </a>
+    <a class="card tile" href="events.html">
+      <div class="tile-top">
+        <span class="glyph"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="9" y="3" width="6" height="11" rx="3"/><path d="M5 11a7 7 0 0 0 14 0M12 18v3"/></svg></span>
+        <h2>Event Registration</h2><span class="go-arrow" aria-hidden="true">→</span>
+      </div>
+      <p>Register your act and join your bandmates.</p>
+      <div class="status quiet" id="event-status"></div>
+    </a>
+  </section>
+
+  <div class="section-head"><span class="title">Upcoming events</span></div>
+  <section class="card" style="padding:0;overflow:hidden"><div class="list" id="events"><div class="none">Loading…</div></div></section>
+
+  <nav class="socials" aria-label="JGU Music Society elsewhere">
+    <a href="https://www.instagram.com/jgumusicsociety" target="_blank" rel="noopener">Instagram</a>
+    <a href="https://www.linkedin.com/company/jgu-music-society/posts/?feedView=all" target="_blank" rel="noopener">LinkedIn</a>
+    <a href="mailto:musicsociety@jgu.edu.in">Email</a>
+  </nav>
+
   <footer class="credit">
     <div class="crest" aria-hidden="true"></div>
     <div>
-      Slot Booking © 2026 <b>Eash Goyal</b> (24014376) and <b>Eashan Goyal</b> (24014377), LLB (Hons) 2024,
+      © 2026 <b>Eash Goyal</b> (24014376) and <b>Eashan Goyal</b> (24014377), LLB (Hons) 2024,
       Jindal Global Law School. All rights reserved.
       <div class="terms">Made available to the JGU Music Society for its use; ownership is not transferred. Copying, modifying or redistributing it without the authors’ written permission is prohibited.</div>
     </div>
@@ -358,606 +431,95 @@
   })() } };
 </script>
 <script>
-  var TOKEN_KEY = 'sb_test_token';
-  var POLL_MS = 8000;   // Apps Script can't push; ~8 s is as fast as is kind to the quotas
+  var TOKEN_KEY = 'sb_test_token';   // the login the other two pages saved
   var TZ = 'Asia/Kolkata';
+  var token = '';
+  try { token = localStorage.getItem(TOKEN_KEY) || ''; } catch (e) {}
 
-  var canRemember = probeStorage();
-  var token = loadToken();
-  var state = null;
-  var busy = false;
-  var lastPoll = 0;
-
-  // Everything anyone types lives here, not in the inputs, so a redraw never
-  // loses it.
-  var login = { step: 'email', email: '', pin: '', pin2: '' };
-  var formFor = null;                           // slot id with the booking form open
-  var bookDraft = { attendees: '', isPrivate: false };
-  var editing = false;                          // "Your slot" edit form open
-  var editDraft = { attendees: '', isPrivate: false };
-  var cancelArmed = false;                      // two-tap confirms; confirm() is often blocked in embeds
-  var adminEditFor = null;                      // slot id an admin is editing
-  var adminDraft = { attendees: '', isPrivate: false };
-  var adminArmed = null;                        // slot id awaiting a second tap to cancel
-  var dailyArmed = false;
-  var clearArmed = false;
-  var adminEmail = '';
-  var noPin = null;                             // result of "members without a PIN"
-
-  function probeStorage() {
-    try { localStorage.setItem('sb_probe', '1'); localStorage.removeItem('sb_probe'); return true; }
-    catch (e) { return false; }
-  }
-  function loadToken() { try { return localStorage.getItem(TOKEN_KEY) || ''; } catch (e) { return ''; } }
-  function saveToken(t) {
-    token = t || '';
-    try { t ? localStorage.setItem(TOKEN_KEY, t) : localStorage.removeItem(TOKEN_KEY); } catch (e) {}
-  }
-
-  /* ---------------------------------------------------------------- server */
-
-  // After these fail, the page is usually behind ("someone just took that
-  // slot"), so it catches up at once instead of waiting for the next poll.
-  var RESYNC_ON_ERROR = { bookSlot: 1, updateBooking: 1, cancelSlot: 1,
-                          adminUpdate: 1, adminCancel: 1, adminSetOpen: 1,
-                          adminSetLayout: 1, adminClearAll: 1 };
-
-  function call(fn, args, onOk, quiet) {
-    if (!quiet) { busy = true; render(); }
-    var runner = google.script.run
-      .withSuccessHandler(function(res) { if (!quiet) busy = false; onOk(res); })
-      .withFailureHandler(function(err) {
-        if (!quiet) busy = false;
-        // Apps Script hands errors over as "Error: <message>". Strip that, or
-        // the AUTH: check below never matches and an expired login sticks.
-        var text = ((err && err.message) || String(err)).replace(/^Error:\s*/, '');
-        var loggedOut = text.indexOf('AUTH:') === 0;
-        if (loggedOut) { saveToken(''); text = text.slice(5).trim(); if (state) state.me = null; }
-        if (!quiet) show(text, true);
-        // A failed background poll changes nothing on screen, so it mustn't redraw.
-        if (!quiet || loggedOut) render();
-        if (RESYNC_ON_ERROR[fn]) refresh(true);
-      });
-    runner[fn].apply(runner, args);
-  }
-
-  /** Admin calls answer with { message, state } or { message }. */
-  function adminCall(fn, args, after) {
-    call(fn, [token].concat(args), function(res) {
-      if (after) after(res);
-      if (res.message) show(res.message);
-      if (res.state) applyState(res.state, false); else render();
-    });
-  }
-
-  function refresh(quiet) {
-    lastPoll = Date.now();
-    call('getState', [token], function(s) { applyState(s, quiet); }, quiet);
-  }
-
-  // Background polls only redraw parts with nothing being typed in them. A
-  // full redraw while someone types would move their cursor and close the
-  // keyboard on a phone.
-  function applyState(s, fromPoll) {
-    var hadMe = !!(state && state.me);
-    state = s;
-    if (!s.me && token) saveToken('');
-    if (fromPoll && hadMe === !!s.me) renderLive(); else render();
-  }
-
-  function poll() {
-    if (document.hidden || busy || Date.now() - lastPoll < 2000) return;
-    refresh(true);
-  }
-
-  /* ---------------------------------------------------------------- render */
-
-  function render() {
-    renderWho(); renderLogin(); renderClosed(); renderMine();
-    renderLiveTable(); renderSnapshot(); renderAdmin(); renderFoot();
-  }
-
-  function renderLive() {
-    renderWho(); renderClosed(); renderSnapshot(); renderFoot();
-    if (!editing) renderMine();
-    if (formFor) {
-      var target = slotById(formFor);
-      if (!target || target.status !== 'Available') {
-        formFor = null;
-        show('Someone just took ' + (target ? target.time : 'that slot') + '. Pick another.', true);
-        renderLiveTable();
-      }
-      return;   // otherwise leave the table alone until the form is done
-    }
-    if (!adminEditFor) renderLiveTable();
-  }
-
-  function isAdmin() { return !!(state && state.me && state.me.isAdmin); }
-
-  function renderWho() {
-    var who = document.getElementById('who');
-    who.textContent = '';
-    document.getElementById('adminpill').hidden = !isAdmin();
-    if (!state || !state.me) return;
-    who.appendChild(document.createTextNode(state.me.name));
-    who.appendChild(el('button', { 'class': 'link', text: 'Log out', onclick: function() {
-      saveToken(''); state.me = null; formFor = null; editing = false; adminEditFor = null;
-      noPin = null; show(''); render();
-    }}));
-  }
-
-  function renderClosed() {
-    document.getElementById('closed').hidden = !(state && state.windowEnforced && !state.open);
-  }
-
-  function renderFoot() {
-    document.getElementById('foot').textContent = state
-      ? (state.windowEnforced ? '' : 'Booking window switched off · ')
-        + 'Updated ' + fmtTime(new Date().toISOString())
-      : 'Loading…';
-  }
-
-  function renderLogin() {
-    var box = document.getElementById('login');
-    box.hidden = !state || !!state.me;
-    if (box.hidden) return;
-    box.textContent = '';
-    box.appendChild(el('h2', { text: 'Log in to book' }));
-
-    var back = el('button', { 'class': 'link', text: 'Use a different email', onclick: function() {
-      login = { step: 'email', email: login.email, pin: '', pin2: '' }; show(''); render();
-    }});
-
-    if (login.step === 'email') {
-      var email = el('input', { type: 'text', placeholder: 'yourname@jgu.edu.in or your first name',
-                                autocomplete: 'username', autocapitalize: 'none', value: login.email });
-      email.oninput = function() { login.email = email.value; };
-      var next = function() {
-        login.email = login.email.trim();
-        call('startLogin', [login.email], function(res) {
-          login.step = res.hasPin ? 'pin' : 'set';
-          login.label = res.name || login.email;
-          login.pin = ''; login.pin2 = '';
-          show(''); render();
-        });
-      };
-      email.onkeydown = function(e) { if (e.key === 'Enter') next(); };
-      box.appendChild(el('label', { text: 'JGU email or first name' }));
-      box.appendChild(email);
-      box.appendChild(el('div', { 'class': 'actions' }, [
-        el('button', { 'class': 'primary', text: 'Continue', disabled: busy, onclick: next })
-      ]));
-
-    } else if (login.step === 'set') {
-      var pin = pinInput('new-password', 'pin');
-      var pin2 = pinInput('new-password', 'pin2');
-      var save = function() {
-        if (login.pin !== login.pin2) { show('The two PINs don’t match.', true); return; }
-        call('setPin', [login.email, login.pin], loggedIn);
-      };
-      pin2.onkeydown = function(e) { if (e.key === 'Enter') save(); };
-      box.appendChild(el('div', { text: 'First time here — choose a 4-digit PIN for ' + login.email + '.' }));
-      box.appendChild(el('div', { 'class': 'hint',
-        text: 'You’ll use it to log in on any other device. Keep it to yourself. ' +
-              'Avoid 1234, 0000 and similar — they’re not allowed.' }));
-      box.appendChild(el('label', { text: 'Choose PIN' }));  box.appendChild(pin);
-      box.appendChild(el('label', { text: 'Type it again' })); box.appendChild(pin2);
-      box.appendChild(el('div', { 'class': 'actions' }, [
-        el('button', { 'class': 'primary', text: 'Set PIN and log in', disabled: busy, onclick: save }), back
-      ]));
-      setTimeout(function() { if (!login.pin) pin.focus(); }, 0);
-
-    } else {
-      var entry = pinInput('current-password', 'pin');
-      var go = function() { call('loginWithPin', [login.email, login.pin], loggedIn); };
-      entry.onkeydown = function(e) { if (e.key === 'Enter') go(); };
-      box.appendChild(el('label', { text: 'PIN for ' + login.label }));
-      box.appendChild(entry);
-      box.appendChild(el('div', { 'class': 'actions' }, [
-        el('button', { 'class': 'primary', text: 'Log in', disabled: busy, onclick: go }), back
-      ]));
-      box.appendChild(el('div', { 'class': 'hint', text: 'Forgot your PIN? Ask an admin to reset it.' }));
-      setTimeout(function() { if (!login.pin) entry.focus(); }, 0);
-    }
-
-    box.appendChild(el('div', { 'class': 'hint', text: canRemember
-      ? 'This device will keep you logged in for about a semester.'
-      : 'This browser can’t remember your login, so you’ll enter your PIN each visit.' }));
-  }
-
-  // Masked 4-digit field bound to login[field]. The autocomplete hint lets a
-  // phone's password manager offer to save the PIN.
-  function pinInput(autocomplete, field) {
-    var input = el('input', { type: 'password', inputmode: 'numeric', pattern: '[0-9]*',
-                              maxlength: '4', autocomplete: autocomplete, placeholder: '••••',
-                              value: login[field] });
-    input.oninput = function() { input.value = input.value.replace(/\D/g, ''); login[field] = input.value; };
-    return input;
-  }
-
-  function loggedIn(res) {
-    saveToken(res.token);
-    login = { step: 'email', email: '', pin: '', pin2: '' };
-    show('');
-    applyState(res.state, false);
-  }
-
-  function renderMine() {
-    var box = document.getElementById('mine');
-    var slot = mySlot();
-    box.hidden = !slot;
-    if (!slot) { editing = false; return; }
-    box.textContent = '';
-    box.appendChild(el('h2', { text: 'Your slot · ' + fmtDay(state.liveDate) }));
-    box.appendChild(el('div', { 'class': 'big', text: slot.time }));
-
-    if (editing) {
-      box.appendChild(draftFields(editDraft));
-      box.appendChild(el('div', { 'class': 'actions' }, [
-        el('button', { 'class': 'primary', text: 'Save', disabled: busy, onclick: function() {
-          call('updateBooking', [token, slot.id, editDraft.attendees, editDraft.isPrivate], function(s) {
-            editing = false; show('Saved.'); applyState(s, false);
-          });
-        }}),
-        el('button', { text: 'Never mind', onclick: function() { editing = false; renderMine(); } })
-      ]));
-      return;
-    }
-
-    box.appendChild(el('div', { 'class': 'hint',
-      text: (slot.attendees ? 'Attendees: ' + slot.attendees : 'No attendees added yet')
-            + (slot.isPrivate ? ' · 🔒 Private' : '') }));
-    box.appendChild(el('div', { 'class': 'actions' }, [
-      el('button', { text: 'Edit attendees', disabled: busy, onclick: function() {
-        editing = true; cancelArmed = false;
-        editDraft = { attendees: slot.attendees || '', isPrivate: !!slot.isPrivate };
-        renderMine();
-      }}),
-      el('button', {
-        'class': 'danger', disabled: busy,
-        text: cancelArmed ? 'Tap again to cancel' : 'Cancel booking',
-        onclick: function() {
-          if (!cancelArmed) {
-            cancelArmed = true; renderMine();
-            setTimeout(function() { cancelArmed = false; if (!editing) renderMine(); }, 4000);
-            return;
-          }
-          cancelArmed = false;
-          call('cancelSlot', [token, slot.id], function(s) { show('Booking cancelled.'); applyState(s, false); });
-        }
-      })
-    ]));
-  }
-
-  /* --------------------------------------------------------------- tables */
-
-  function renderLiveTable() {
-    var box = document.getElementById('live');
-    box.textContent = '';
-    if (!state) return;
-    box.appendChild(el('div', { 'class': 'section-head' }, [
-      el('span', { 'class': 'title', text: 'Slots for ' + fmtDay(state.liveDate) }),
-      el('span', { 'class': 'sub', text: 'Booking for this day opens at 6:00 PM the day before (test timing)' })
-    ]));
-    box.appendChild(slotTable(state.slots, true));
-  }
-
-  function renderSnapshot() {
-    var box = document.getElementById('snapshot');
-    var snap = state && state.snapshot;
-    box.hidden = !snap;
-    box.textContent = '';
-    if (!snap) return;
-    box.appendChild(el('div', { 'class': 'break', text: 'Previous day' }));
-    box.appendChild(el('div', { 'class': 'section-head' }, [
-      el('span', { 'class': 'title', text: fmtDay(snap.forDate) + ' — final' }),
-      el('span', { 'class': 'sub', text: 'Late-night slots are still on · shown until 1:00 AM' })
-    ]));
-    box.appendChild(slotTable(snap.rows, false));
-  }
-
-  // One table shape for both sections. Only the live one has Book buttons,
-  // forms and the admin column; the previous day is read-only.
-  function slotTable(rows, live) {
-    var adminCol = live && isAdmin();
-    var cols = adminCol ? 6 : 5;
-    var head = ['Time Slot', 'Booked By', 'Booked At', 'Attendees', 'Private'];
-    if (adminCol) head.push('⚙ Admin');
-
-    var body = el('tbody');
-    var canBook = live && !!(state.me) && state.open && !mySlot();
-
-    if (!rows.length) {
-      body.appendChild(el('tr', {}, [el('td', { colspan: String(cols), 'class': 'empty',
-        text: live ? 'No slots are open for this day.' : 'No bookings that day.' })]));
-    }
-
-    rows.forEach(function(s) {
-      var booked = s.status === 'Booked';
-
-      var timeCell = el('td', { 'class': 'time' }, [
-        document.createTextNode(s.time),
-        s.now ? el('span', { 'class': 'nowtag', text: 'Now' }) : null
-      ]);
-
-      var who;
-      if (booked) {
-        who = el('div', {}, [
-          document.createTextNode(s.name),
-          s.email ? el('div', { 'class': 'email', text: s.email }) : null
-        ]);
-      } else if (s.status === 'Available' && canBook) {
-        who = el('button', { 'class': 'primary small', text: 'Book', disabled: busy, onclick: function() {
-          formFor = formFor === s.id ? null : s.id;
-          bookDraft = { attendees: '', isPrivate: false };
-          adminEditFor = null; show(''); renderLiveTable();
-        }});
-      } else if (s.status === 'Available') {
-        who = el('span', { 'class': 'tag av', text: 'Available' });
-      } else {
-        who = el('span', { 'class': 'tag na', text: 'Not open' });
-      }
-
-      var cells = [
-        timeCell,
-        el('td', {}, [who]),
-        cell(booked, booked ? fmtBookedAt(s.bookedAt) : '', 'nowrap'),
-        cell(booked, s.attendees),
-        cell(booked, s.isPrivate ? '🔒 Private' : '', 'nowrap')
-      ];
-      if (adminCol) cells.push(el('td', { 'class': 'adm-col' }, [adminActions(s)]));
-
-      var cls = (s.mine ? 'mine ' : '') + (s.now ? 'now' : '');
-      body.appendChild(el('tr', { 'class': cls.trim() }, cells));
-
-      if (live && formFor === s.id && canBook) body.appendChild(bookFormRow(s, cols));
-      if (live && adminEditFor === s.id) body.appendChild(adminEditRow(s, cols));
-    });
-
-    var table = el('table', {}, [
-      el('thead', {}, [el('tr', {}, head.map(function(h) {
-        return el('th', h === '⚙ Admin' ? { 'class': 'adm-col', text: h } : { text: h });
-      }))]),
-      body
-    ]);
-    return el('div', { 'class': 'tablewrap' }, [table]);
-  }
-
-  // Booked rows show a dash for an empty value; free rows stay blank.
-  function cell(booked, value, cls) {
-    if (value) return el('td', cls ? { 'class': cls, text: value } : { text: value });
-    return el('td', booked ? { 'class': 'dash', text: '—' } : {});
-  }
-
-  function bookFormRow(slot, cols) {
-    return el('tr', { 'class': 'formrow' }, [
-      el('td', { colspan: String(cols) }, [
-        el('div', { 'class': 'big', text: 'Book ' + slot.time + ' · ' + fmtDay(state.liveDate) }),
-        draftFields(bookDraft),
-        el('div', { 'class': 'actions' }, [
-          el('button', { 'class': 'primary', text: 'Confirm booking', disabled: busy, onclick: function() {
-            call('bookSlot', [token, slot.id, bookDraft.attendees, bookDraft.isPrivate], function(s) {
-              formFor = null; show('Booked ' + slot.time + '.'); applyState(s, false);
-            });
-          }}),
-          el('button', { text: 'Never mind', onclick: function() { formFor = null; renderLiveTable(); } })
-        ])
-      ])
-    ]);
-  }
-
-  // Attendees + private, bound to a draft object so typing survives redraws.
-  function draftFields(draft) {
-    var attendees = el('input', { type: 'text', maxlength: '200',
-                                  placeholder: 'Who’s coming? (optional, can add later)', value: draft.attendees });
-    attendees.oninput = function() { draft.attendees = attendees.value; };
-    var priv = el('input', { type: 'checkbox', checked: draft.isPrivate });
-    priv.onchange = function() { draft.isPrivate = priv.checked; };
-    return el('div', {}, [
-      el('label', { text: 'Attendees' }), attendees,
-      el('label', { 'class': 'check' }, [priv, document.createTextNode('Private session')])
-    ]);
-  }
-
-  /* ----------------------------------------------------------------- admin */
-
-  function adminActions(s) {
-    if (s.status === 'Booked') {
-      return el('div', { 'class': 'tight' }, [
-        el('button', { 'class': 'small adm', text: 'Edit', disabled: busy, onclick: function() {
-          adminEditFor = adminEditFor === s.id ? null : s.id;
-          adminDraft = { attendees: s.attendees || '', isPrivate: !!s.isPrivate };
-          formFor = null; renderLiveTable();
-        }}),
-        el('button', { 'class': 'small adm danger', disabled: busy,
-          text: adminArmed === s.id ? 'Tap again' : 'Cancel',
-          onclick: function() {
-            if (adminArmed !== s.id) {
-              adminArmed = s.id; renderLiveTable();
-              setTimeout(function() {
-                if (adminArmed === s.id) { adminArmed = null; if (!formFor && !adminEditFor) renderLiveTable(); }
-              }, 4000);
-              return;
-            }
-            adminArmed = null;
-            adminCall('adminCancel', [s.id]);
-          }})
-      ]);
-    }
-    if (s.status === 'Available') {
-      return el('button', { 'class': 'small adm', text: 'Close', disabled: busy,
-                            onclick: function() { adminCall('adminSetOpen', [s.id, false]); } });
-    }
-    return el('button', { 'class': 'small adm', text: 'Open', disabled: busy,
-                          onclick: function() { adminCall('adminSetOpen', [s.id, true]); } });
-  }
-
-  function adminEditRow(slot, cols) {
-    return el('tr', { 'class': 'formrow adm' }, [
-      el('td', { colspan: String(cols) }, [
-        el('div', { 'class': 'big', text: 'Edit ' + slot.name + '’s booking · ' + slot.time }),
-        draftFields(adminDraft),
-        el('div', { 'class': 'actions' }, [
-          el('button', { 'class': 'adm primary', text: 'Save', disabled: busy, onclick: function() {
-            adminCall('adminUpdate', [slot.id, adminDraft.attendees, adminDraft.isPrivate],
-                      function() { adminEditFor = null; });
-          }}),
-          el('button', { 'class': 'adm', text: 'Never mind', onclick: function() { adminEditFor = null; renderLiveTable(); } })
-        ])
-      ])
-    ]);
-  }
-
-  function renderAdmin() {
-    var box = document.getElementById('admin');
-    box.hidden = !isAdmin();
-    if (box.hidden) return;
-    box.textContent = '';
-    box.appendChild(el('h2', {}, [el('span', { 'class': 'adm-tag', text: 'Admin' }), document.createTextNode('Slot booking')]));
-
-    // Slot layout: the old Notion admin page's quick buttons
-    box.appendChild(el('h3', { text: 'Slot layout' }));
-    var layouts = state.layouts || [];
-    box.appendChild(el('div', { 'class': 'actions' }, layouts.map(function(l) {
-      return el('button', { 'class': 'adm' + (l.active ? ' primary' : ''), text: l.label, disabled: busy,
-                            onclick: function() { adminCall('adminSetLayout', [l.group]); } });
-    })));
-    var current = layouts.filter(function(l) { return l.active; })[0];
-    box.appendChild(el('div', { 'class': 'hint', text:
-      (current ? 'Now: ' + current.label + '. '
-        : state.slots.some(function(s) { return s.status !== 'NA'; })
-          ? 'Now: custom, with slots opened or closed by hand. ' : 'Now: every slot is closed. ')
-      + 'A layout opens its slots and closes the rest. Bookings and blocks outside it must be cleared first, '
-      + 'so switch before booking opens at 6:00 PM.' }));
-
-    // Clear and close all: cancels everything and shows members no slots
-    box.appendChild(el('h3', { text: 'Clear and close all' }));
-    box.appendChild(el('div', { 'class': 'actions' }, [
-      el('button', { 'class': 'adm danger', disabled: busy,
-        text: clearArmed ? 'Tap again — this cancels every booking and closes every slot' : 'Clear and close all',
-        onclick: function() {
-          if (!clearArmed) {
-            clearArmed = true; renderAdmin();
-            setTimeout(function() { clearArmed = false; renderAdmin(); }, 5000);
-            return;
-          }
-          clearArmed = false;
-          adminCall('adminClearAll', []);
-        }})
-    ]));
-    box.appendChild(el('div', { 'class': 'hint',
-      text: 'Cancels every booking and block and closes every slot, so members see none until you pick a layout. '
-            + 'Nothing is archived; the cancelled bookings are listed in the admin log.' }));
-
-
-    // Nightly snapshot + reset
-    box.appendChild(el('h3', { text: 'Nightly snapshot + reset' }));
-    var d = state.daily;
-    box.appendChild(el('div', { 'class': 'hint' + (d && !d.ok ? ' bad' : ''), text: d
-      ? (d.ok ? 'Last run ' : 'Last run FAILED ') + fmtBookedAt(new Date(d.at).toISOString())
-        + ' (' + (d.by === 'schedule' ? 'scheduled' : d.by) + '): ' + d.message
-      : 'Hasn’t run yet. It runs by itself between 5:30 and 5:40 PM (test timing).' }));
-    box.appendChild(el('div', { 'class': 'actions' }, [
-      el('button', { 'class': 'adm danger', disabled: busy,
-        text: dailyArmed ? 'Tap again — this clears every live booking' : 'Run snapshot + reset now',
-        onclick: function() {
-          if (!dailyArmed) {
-            dailyArmed = true; renderAdmin();
-            setTimeout(function() { dailyArmed = false; renderAdmin(); }, 5000);
-            return;
-          }
-          dailyArmed = false;
-          adminCall('adminRunDaily', []);
-        }})
-    ]));
-
-    // PIN help
-    box.appendChild(el('h3', { text: 'PIN help' }));
-    var input = el('input', { type: 'email', placeholder: 'member@jgu.edu.in', value: adminEmail });
-    input.oninput = function() { adminEmail = input.value; };
-    box.appendChild(el('div', { 'class': 'inline' }, [
-      input,
-      el('button', { 'class': 'adm', text: 'Reset PIN', disabled: busy,
-                     onclick: function() { adminCall('adminResetPin', [adminEmail]); } }),
-      el('button', { 'class': 'adm', text: 'Unlock', disabled: busy,
-                     onclick: function() { adminCall('adminUnlock', [adminEmail]); } })
-    ]));
-    box.appendChild(el('div', { 'class': 'hint',
-      text: 'Reset: they choose a new PIN at their next login. Unlock: lifts the 30-minute lock after 5 wrong tries.' }));
-
-    // Members without a PIN
-    box.appendChild(el('h3', { text: 'Members without a PIN' }));
-    box.appendChild(el('div', { 'class': 'actions' }, [
-      el('button', { 'class': 'adm', text: noPin ? 'Refresh list' : 'Show list', disabled: busy, onclick: function() {
-        adminCall('adminMembersWithoutPin', [], function(res) { noPin = res; });
-      }})
-    ]));
-    if (noPin) {
-      box.appendChild(el('div', { 'class': 'hint',
-        text: noPin.withPin + ' of ' + noPin.total + ' active members have set a PIN. Not yet: '
-              + noPin.missing.length + '.' }));
-      if (noPin.missing.length) {
-        box.appendChild(el('div', { 'class': 'namelist' }, noPin.missing.map(function(m) {
-          return el('div', {}, [document.createTextNode(m.name + ' '), el('span', { 'class': 'email', text: m.email })]);
-        })));
-      }
-    }
-  }
-
-  /* --------------------------------------------------------------- helpers */
-
-  function show(text, isError) {
-    var box = document.getElementById('msg');
-    box.textContent = text || '';
-    box.className = 'msg' + (isError ? ' err' : '');
-    box.hidden = !text;
-  }
-
-  // Build DOM with textContent only — names and attendees are typed by members.
   function el(tag, attrs, kids) {
     var node = document.createElement(tag);
     Object.keys(attrs || {}).forEach(function(k) {
       if (k === 'text') node.textContent = attrs[k];
-      else if (k === 'onclick') node.onclick = attrs[k];
-      else if (k === 'disabled' || k === 'checked' || k === 'value') node[k] = attrs[k];
       else node.setAttribute(k, attrs[k]);
     });
     (kids || []).forEach(function(c) { if (c) node.appendChild(c); });
     return node;
   }
 
-  function fmtTime(iso) {
-    if (!iso) return '';
-    return new Date(iso).toLocaleTimeString('en-IN', {
-      timeZone: TZ, hour: 'numeric', minute: '2-digit', hour12: true
-    }).toUpperCase();
+  function fmtWhen(ms) {
+    var d = new Date(ms);
+    return d.toLocaleDateString('en-IN', { timeZone: TZ, weekday: 'short', day: 'numeric', month: 'short' }) + ', '
+      + d.toLocaleTimeString('en-IN', { timeZone: TZ, hour: 'numeric', minute: '2-digit', hour12: true }).toUpperCase();
   }
 
-  // "26 Oct, 9:31 PM" — most bookings are made the evening before, so the date matters.
-  function fmtBookedAt(iso) {
-    if (!iso) return '';
-    var day = new Date(iso).toLocaleDateString('en-IN', { timeZone: TZ, day: 'numeric', month: 'short' });
-    return day + ', ' + fmtTime(iso);
-  }
-
-  // "Wed, 28 Oct". Noon IST, so the date can't slip across midnight.
   function fmtDay(dateStr) {
-    if (!dateStr) return '';
-    return new Date(dateStr + 'T12:00:00+05:30').toLocaleDateString('en-IN', {
-      timeZone: TZ, weekday: 'short', day: 'numeric', month: 'short'
+    return new Date(dateStr + 'T12:00:00+05:30').toLocaleDateString('en-IN',
+      { timeZone: TZ, weekday: 'short', day: 'numeric', month: 'short' });
+  }
+
+  function setStatus(id, text, cls) {
+    var box = document.getElementById(id);
+    box.textContent = text;
+    box.className = 'status ' + cls;
+  }
+
+  function showWho(me) {
+    var who = document.getElementById('who');
+    who.textContent = '';
+    document.getElementById('hello').textContent = me ? 'Hi, ' + me.name.split(' ')[0] : 'Welcome';
+    if (!me) return;
+    who.appendChild(document.createTextNode(me.name));
+    var out = el('button', { 'class': 'link', text: 'Log out' });
+    out.onclick = function() {
+      try { localStorage.removeItem(TOKEN_KEY); } catch (e) {}
+      token = ''; load();
+    };
+    who.appendChild(out);
+  }
+
+  // The tiles are plain links, so a failed status check leaves them working.
+  function ask(fn, onOk) {
+    google.script.run.withSuccessHandler(onOk).withFailureHandler(function() {})[fn](token);
+  }
+
+  function load() {
+    ask('getState', function(s) {
+      showWho(s.me);
+      var mine = s.slots.filter(function(x) { return x.mine; })[0];
+      var free = s.slots.filter(function(x) { return x.status === 'Available'; }).length;
+      if (mine) setStatus('slot-status', 'Your slot: ' + mine.time + ', ' + fmtDay(s.liveDate), 'mine');
+      else if (s.open && free) setStatus('slot-status', free + ' slot' + (free === 1 ? '' : 's') + ' free for ' + fmtDay(s.liveDate), 'good');
+      else if (s.open) setStatus('slot-status', 'No free slots for ' + fmtDay(s.liveDate), 'quiet');
+      else setStatus('slot-status', 'Booking isn’t open right now', 'quiet');
+    });
+    ask('getEventState', function(s) {
+      var open = s.events.filter(function(e) { return e.phase === 'open'; });
+      var soon = s.events.filter(function(e) { return e.phase === 'upcoming'; })
+        .sort(function(a, b) { return a.opensAt - b.opensAt; })[0];
+      if (open.length) setStatus('event-status', open.length === 1 ? 'Open now: ' + open[0].name : open.length + ' events open now', 'good');
+      else if (soon) setStatus('event-status', soon.name + ' opens ' + fmtWhen(soon.opensAt), 'quiet');
+      else setStatus('event-status', 'Nothing open right now', 'quiet');
+
+      var list = document.getElementById('events');
+      list.textContent = '';
+      if (!s.events.length) { list.appendChild(el('div', { 'class': 'none', text: 'No upcoming events yet.' })); return; }
+      s.events.forEach(function(e) {
+        var label = { upcoming: 'Opens ' + fmtWhen(e.opensAt), closed: 'Final list' }[e.phase]
+          || Math.max(e.slots - e.acts.length, 0) + ' of ' + e.slots + ' slots left';
+        list.appendChild(el('a', { 'class': 'row', href: 'events.html' }, [
+          el('span', { 'class': 'what', text: e.name }, [
+            el('small', { text: fmtWhen(e.startsAt) + (e.location ? ' · ' + e.location : '') })
+          ]),
+          el('span', { 'class': 'phase ' + e.phase, text: label })
+        ]));
+      });
     });
   }
 
-  function mySlot() { return state && state.slots.filter(function(s) { return s.mine; })[0]; }
-  function slotById(id) { return state && state.slots.filter(function(s) { return s.id === id; })[0]; }
-
-  /* ----------------------------------------------------------------- start */
-
-  refresh(false);
-  setInterval(poll, POLL_MS);
-  // Catch up the moment someone comes back to the tab, not on the next tick.
-  document.addEventListener('visibilitychange', poll);
-  window.addEventListener('focus', poll);
+  load();
+  // Coming back from another page or tab: show the latest, not what was there before.
+  window.addEventListener('pageshow', function(e) { if (e.persisted) load(); });
+  document.addEventListener('visibilitychange', function() { if (!document.hidden) load(); });
 </script>
 </body>
 </html>

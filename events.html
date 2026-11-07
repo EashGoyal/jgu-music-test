@@ -407,10 +407,17 @@
     .pos { width: 34px; height: 34px; }
   }
 </style>
+<style>
+  a.homelink { flex: none; font-size: 12.5px; font-weight: 600; color: var(--maroon); text-decoration: none;
+               padding: 7px 12px 7px 10px; border-radius: 999px; background: #fff;
+               box-shadow: inset 0 0 0 1px var(--line); }
+  a.homelink:hover { background: var(--rose-soft); }
+</style>
 </head>
 <body>
 <header class="appbar">
   <div class="bar">
+    <a class="homelink" href="./">‹ Home</a>
     <div class="crest" role="img" aria-label="JGU Music Society crest"></div>
     <div class="brand"><small>JGU Music Society</small><strong>Event Registration</strong></div>
     <span class="pill">TEST</span><span id="adminpill" class="pill admin" hidden>ADMIN</span>

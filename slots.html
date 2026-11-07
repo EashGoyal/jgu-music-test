@@ -1,0 +1,970 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Slot Booking (Test)</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex">
+<link rel="icon" type="image/png" href="crest.png">
+<link rel="apple-touch-icon" href="crest.png">
+<base target="_top">
+<meta charset="utf-8">
+<meta name="color-scheme" content="only light">
+<meta name="author" content="Eash Goyal (24014376) and Eashan Goyal (24014377)">
+<meta name="copyright" content="© 2026 Eash Goyal (24014376) and Eashan Goyal (24014377), LLB (Hons) 2024, Jindal Global Law School. All rights reserved. Made available to the JGU Music Society for its use; ownership is not transferred. Copying, modifying or redistributing it without the authors’ written permission is prohibited.">
+<link rel="preconnect" href="https://cdn.fontshare.com" crossorigin>
+<link rel="stylesheet" href="https://api.fontshare.com/v2/css?f[]=general-sans@400,500,600,700&display=swap">
+<style>
+  /* Palette taken from the Music Society crest: maroon field, rose clef, ivory paper. */
+  :root {
+    color-scheme: only light;
+    --maroon: #7b1530; --maroon-2: #5c0f24; --rose: #b82e50; --rose-soft: #fbe9ee;
+    --paper: #faf6f1; --card: #fffdfb;
+    --ink: #2a1a1f; --mute: #7d6b70; --faint: #b9aaae; --line: #efe5e2; --soft: #f6efeb;
+    --green: #22744f; --green-bg: #e2f2e8;
+    --red: #b3263e; --red-bg: #fde4e8;
+    --mine: #fdf0f3; --now: #d1343f; --now-bg: #fff6e8; --amber: #f0a33b;
+    --shadow: 0 1px 2px rgba(92,15,36,.04), 0 8px 24px -12px rgba(92,15,36,.14);
+    --shadow-lift: 0 2px 4px rgba(92,15,36,.06), 0 16px 32px -14px rgba(92,15,36,.28);
+    --ease: cubic-bezier(.22,1,.36,1);
+    --font: "General Sans", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    --stave: repeating-linear-gradient(to bottom, rgba(255,255,255,.13) 0 1px, transparent 1px 9px);
+    --logo: url(data:image/webp;base64,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);
+  }
+  * { box-sizing: border-box; }
+  [hidden] { display: none !important; }
+  html { -webkit-text-size-adjust: 100%; }
+  body { margin: 0; font: 14.5px/1.5 var(--font); color: var(--ink); min-height: 100vh;
+         -webkit-font-smoothing: antialiased; font-variant-numeric: tabular-nums;
+         background:
+           radial-gradient(900px 420px at 88% -120px, rgba(184,46,80,.12), transparent 70%),
+           radial-gradient(700px 380px at -10% 0, rgba(123,21,48,.07), transparent 70%),
+           var(--paper); }
+  /* Paper grain */
+  body::before { content: ""; position: fixed; inset: 0; pointer-events: none; z-index: 0; opacity: .5;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 .36 0 0 0 0 .06 0 0 0 0 .14 0 0 0 .06 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E"); }
+  main { position: relative; z-index: 1; max-width: 940px; margin: 0 auto; padding: 26px 16px 28px; }
+  ::selection { background: var(--rose); color: #fff; }
+
+  /* ---------- app bar */
+  .appbar { position: sticky; top: 0; z-index: 10; background: rgba(250,246,241,.78);
+            -webkit-backdrop-filter: saturate(1.4) blur(14px); backdrop-filter: saturate(1.4) blur(14px);
+            box-shadow: 0 1px 0 var(--line); animation: drop .6s var(--ease) both; }
+  .bar { max-width: 940px; margin: 0 auto; padding: 10px 16px; display: flex; align-items: center;
+         gap: 10px 12px; flex-wrap: wrap; }
+  .crest { flex: none; width: 42px; height: 42px; border-radius: 50%; background: #fff var(--logo) center/cover;
+           box-shadow: 0 0 0 2px #fff, 0 0 0 3px rgba(123,21,48,.12), 0 4px 12px -4px rgba(92,15,36,.35);
+           animation: crest .9s var(--ease) both; }
+  .brand { display: flex; flex-direction: column; line-height: 1.1; }
+  .brand small { font-size: 10.5px; font-weight: 600; letter-spacing: .14em; text-transform: uppercase; color: var(--rose); }
+  .brand strong { font-size: 18px; font-weight: 600; letter-spacing: -.02em; color: var(--maroon-2); }
+  .pill { font: 600 10px/1 var(--font); letter-spacing: .1em; background: #fff3d6; color: #8a5a00;
+          padding: 5px 8px; border-radius: 999px; box-shadow: inset 0 0 0 1px rgba(138,90,0,.15); }
+  .pill.admin { color: #fff; box-shadow: none; }
+  .who { margin-left: auto; display: inline-flex; align-items: center; gap: 10px; font-size: 13px; font-weight: 500;
+         background: #fff; padding: 5px 5px 5px 14px; border-radius: 999px; box-shadow: inset 0 0 0 1px var(--line), var(--shadow); }
+  .who:empty { display: none; }
+  .who button.link { margin: 0; padding: 6px 12px; border-radius: 999px; background: var(--soft);
+                     color: var(--maroon); font-size: 12px; font-weight: 600; text-decoration: none; }
+  .who button.link:hover { background: var(--rose-soft); }
+
+  /* ---------- surfaces */
+  .card { position: relative; background: var(--card); border-radius: 20px; padding: 22px 24px;
+          margin-bottom: 18px; box-shadow: inset 0 0 0 1px var(--line), var(--shadow); }
+  .card h2 { font: 600 18px/1.2 var(--font); letter-spacing: -.015em; margin: 0 0 12px; color: var(--maroon-2); }
+  .card h3 { font: 600 15px/1.25 var(--font); margin: 22px 0 4px; padding-top: 18px; color: var(--ink);
+             border-top: 1px solid var(--line); }
+  .card h3:first-of-type { margin-top: 6px; }
+  .note { background: linear-gradient(135deg, #fff8ec, #fdf0f2); }
+  .msg { display: flex; align-items: center; gap: 10px; padding: 12px 16px; border-radius: 14px; margin-bottom: 18px;
+         background: #fff; font-weight: 500; box-shadow: inset 0 0 0 1px var(--line), var(--shadow);
+         animation: toast .45s var(--ease) both; }
+  .msg::before { content: ""; flex: none; width: 8px; height: 8px; border-radius: 50%; background: var(--green);
+                 box-shadow: 0 0 0 4px var(--green-bg); }
+  .msg.err { background: var(--red-bg); color: #7d1a2c; box-shadow: inset 0 0 0 1px #f6c9d1; }
+  .msg.err::before { background: var(--red); box-shadow: 0 0 0 4px #f9d3da; }
+  .hint { color: var(--mute); font-size: 13px; margin-top: 10px; }
+  .hint.bad { color: var(--red); font-weight: 500; }
+  .big { font: 600 22px/1.2 var(--font); letter-spacing: -.02em; color: var(--maroon-2); }
+
+  /* ---------- login: brand panel on the left, form on the right */
+  #login { display: grid; grid-template-columns: 250px minmax(0,1fr); column-gap: 30px; padding: 0; overflow: hidden; }
+  #login > * { grid-column: 2; margin-right: 26px; }
+  #login > :first-child { margin-top: 28px; }
+  #login > :last-child { margin-bottom: 28px; }
+  #login::after { content: "Music Room"; position: absolute; top: 26px; left: 26px; font-size: 11px; font-weight: 600;
+                  letter-spacing: .16em; text-transform: uppercase; color: #f6c3d0; }
+  #login::before { content: "Book your slot\A in seconds."; white-space: pre-line;
+    grid-column: 1; grid-row: 1 / span 12; display: flex; align-items: flex-end; padding: 26px;
+    font: 600 21px/1.25 var(--font); letter-spacing: -.02em; color: #fff;
+    background: var(--stave) 0 38px / 100% 45px no-repeat,
+                radial-gradient(260px 200px at 100% 0, rgba(184,46,80,.55), transparent 70%),
+                linear-gradient(160deg, #8d1a38, var(--maroon-2)); }
+
+  /* ---------- your slot: a ticket */
+  #mine { color: #fff; padding: 22px 26px; overflow: hidden;
+          background: var(--stave) 0 22px / 100% 45px no-repeat,
+                      radial-gradient(380px 220px at 100% 0, rgba(184,46,80,.6), transparent 70%),
+                      linear-gradient(150deg, #8d1a38, var(--maroon-2));
+          box-shadow: 0 2px 4px rgba(92,15,36,.1), 0 22px 40px -20px rgba(92,15,36,.7); }
+  #mine::before, #mine::after { content: ""; position: absolute; top: 50%; width: 22px; height: 22px; margin-top: -11px;
+                                border-radius: 50%; background: var(--paper); }
+  #mine::before { left: -11px; } #mine::after { right: -11px; }
+  #mine h2 { font-size: 11px; font-weight: 600; letter-spacing: .16em; text-transform: uppercase; color: #f6c3d0; margin-bottom: 6px; }
+  #mine .big { color: #fff; font-size: 30px; }
+  #mine .hint, #mine label, #mine .check { color: rgba(255,255,255,.78); }
+  #mine button { background: #fff; color: var(--maroon-2); box-shadow: none; }
+  #mine button.primary { background: #fff; color: var(--maroon-2); }
+  #mine button.primary::after { background: linear-gradient(100deg, transparent 30%, rgba(184,46,80,.15) 50%, transparent 70%); }
+  #mine button.danger { background: transparent; color: #fff; box-shadow: inset 0 0 0 1px rgba(255,255,255,.45); }
+  #mine button.danger:hover { background: rgba(255,255,255,.12); }
+
+  /* ---------- form controls */
+  label { display: block; font-size: 12.5px; font-weight: 500; color: var(--mute); margin: 14px 0 6px; }
+  input[type=email], input[type=text], input[type=password] {
+    font: inherit; width: 100%; max-width: 420px; padding: 11px 14px; color: var(--ink);
+    border: 0; border-radius: 12px; background: #fff; outline: none;
+    box-shadow: inset 0 0 0 1px #e6d9d6, 0 1px 2px rgba(92,15,36,.04); transition: box-shadow .2s var(--ease); }
+  input::placeholder { color: var(--faint); }
+  input[type=email]:hover, input[type=text]:hover, input[type=password]:hover { box-shadow: inset 0 0 0 1px #d6c3c0; }
+  input[type=email]:focus, input[type=text]:focus, input[type=password]:focus {
+    box-shadow: inset 0 0 0 1.5px var(--rose), 0 0 0 4px rgba(184,46,80,.14); }
+  /* PIN boxes read like a keypad display */
+  input[inputmode=numeric] { max-width: 168px; font: 600 24px/1 var(--font); letter-spacing: .5em;
+                             text-align: center; padding: 13px 0 13px .5em; }
+  input[type=checkbox] { appearance: none; -webkit-appearance: none; margin: 0; width: 18px; height: 18px; flex: none;
+    border-radius: 6px; background: #fff; box-shadow: inset 0 0 0 1.5px #d6c3c0; cursor: pointer;
+    display: grid; place-content: center; transition: background .2s, box-shadow .2s; }
+  input[type=checkbox]::after { content: ""; width: 9px; height: 5px; margin-top: -2px; border: 2px solid #fff;
+    border-top: 0; border-right: 0; transform: rotate(-45deg) scale(0); transition: transform .2s var(--ease); }
+  input[type=checkbox]:checked { background: var(--rose); box-shadow: none; }
+  input[type=checkbox]:checked::after { transform: rotate(-45deg) scale(1); }
+  input[type=checkbox]:focus-visible { box-shadow: inset 0 0 0 1.5px var(--rose), 0 0 0 4px rgba(184,46,80,.15); }
+  .check { display: flex; align-items: center; gap: 9px; margin: 14px 0 0; color: var(--ink); font-size: 13.5px;
+           cursor: pointer; width: fit-content; }
+  .actions { display: flex; gap: 10px; margin-top: 18px; flex-wrap: wrap; align-items: center; }
+  .inline { display: flex; gap: 8px; flex-wrap: wrap; align-items: center; }
+  .inline input { max-width: 300px; }
+
+  button { position: relative; overflow: hidden; font: 500 13.5px/1 var(--font); border: 0; color: var(--ink);
+           background: #fff; border-radius: 999px; padding: 11px 18px; cursor: pointer;
+           box-shadow: inset 0 0 0 1px #e3d4d1, 0 1px 2px rgba(92,15,36,.05);
+           transition: transform .2s var(--ease), box-shadow .2s var(--ease), background .2s, color .2s; }
+  button:hover { box-shadow: inset 0 0 0 1px #d2bdb9, 0 6px 14px -8px rgba(92,15,36,.3); transform: translateY(-1px); }
+  button:active { transform: translateY(0) scale(.97); }
+  button:focus-visible { outline: 2px solid var(--rose); outline-offset: 2px; }
+  button.primary { color: #fff; font-weight: 600;
+                   background: linear-gradient(180deg, #8d1a38, var(--maroon) 55%, var(--maroon-2));
+                   box-shadow: inset 0 1px 0 rgba(255,255,255,.18), 0 1px 2px rgba(92,15,36,.3), 0 8px 18px -10px rgba(123,21,48,.8); }
+  button.primary:hover { box-shadow: inset 0 1px 0 rgba(255,255,255,.22), 0 2px 4px rgba(92,15,36,.3), 0 12px 24px -10px rgba(123,21,48,.9); }
+  /* Shimmer sweep on hover */
+  button.primary::after { content: ""; position: absolute; inset: 0; transform: translateX(-120%);
+    background: linear-gradient(100deg, transparent 30%, rgba(255,255,255,.28) 50%, transparent 70%); }
+  button.primary:hover::after { transform: translateX(120%); transition: transform .8s var(--ease); }
+  button.small { padding: 8px 14px; font-size: 12.5px; }
+  button.danger { color: var(--red); box-shadow: inset 0 0 0 1px #f1c7cf; }
+  button.danger:hover { background: var(--red-bg); box-shadow: inset 0 0 0 1px #eab1bc, 0 6px 14px -8px rgba(179,38,62,.4); }
+  button.link { border-radius: 6px; background: none; box-shadow: none; color: var(--rose); padding: 4px 2px;
+                font-weight: 500; text-decoration: underline; text-decoration-color: rgba(184,46,80,.3);
+                text-underline-offset: 3px; }
+  button.link:hover { transform: none; box-shadow: none; text-decoration-color: currentColor; }
+  button:disabled { opacity: .45; cursor: default; transform: none; }
+
+  /* ---------- section headings above each list */
+  .section-head { display: flex; align-items: baseline; gap: 4px 14px; flex-wrap: wrap; margin: 30px 2px 14px; }
+  .section-head .title { font: 600 26px/1.15 var(--font); letter-spacing: -.025em; color: var(--maroon-2); }
+  .section-head .sub { color: var(--mute); font-size: 13px; }
+  #live > .section-head:first-child { margin-top: 8px; }
+
+  /* The break between today and the previous day */
+  .break { display: flex; align-items: center; gap: 14px; margin: 44px 0 0; color: var(--faint);
+           font-size: 11px; font-weight: 600; text-transform: uppercase; letter-spacing: .18em; }
+  .break::before, .break::after { content: ""; flex: 1; height: 1px;
+    background: linear-gradient(90deg, transparent, #e2d2ce 20%, #e2d2ce 80%, transparent); }
+
+  /* ---------- slot tables. Wide ones scroll sideways on phones with the
+     time column pinned. The left stripe on each row shows its status. */
+  .tablewrap { overflow-x: auto; background: var(--card); border-radius: 18px;
+               box-shadow: inset 0 0 0 1px var(--line), var(--shadow); -webkit-overflow-scrolling: touch; }
+  table { width: 100%; border-collapse: separate; border-spacing: 0; min-width: 640px; }
+  th, td { text-align: left; padding: 11px 14px; vertical-align: middle; border-bottom: 1px solid var(--line); }
+  tbody tr:last-child td { border-bottom: 0; }
+  th { font: 600 11px/1 var(--font); letter-spacing: .06em; text-transform: uppercase; color: var(--mute);
+       background: #f8f2ee; white-space: nowrap; padding-top: 12px; padding-bottom: 11px; }
+  th:first-child, td.time { position: sticky; left: 0; z-index: 1; }
+  th:first-child { background: #f8f2ee; }
+  tbody td { background: var(--card); transition: background .2s; }
+  @media (hover: hover) { tbody tr:not(.mine):not(.now):not(.formrow):not(:has(.tag.na)):hover td { background: #fcf6f3; } }
+  td.time { font-weight: 600; color: var(--maroon-2); white-space: nowrap; box-shadow: inset 4px 0 0 var(--maroon); }
+  tr:has(.tag.av) td.time, tr:has(> td > button.primary) td.time { box-shadow: inset 4px 0 0 #3aa070; }
+  tr:has(.tag.na) td.time { box-shadow: inset 4px 0 0 #dccfcc; color: var(--faint); }
+  tr.now td { background: var(--now-bg); }
+  tr.now td.time { box-shadow: inset 4px 0 0 var(--amber); }
+  tr.mine td { background: var(--mine); }
+  tr.mine td.time { box-shadow: inset 4px 0 0 var(--rose); }
+  td.dash { color: var(--faint); }
+  td.nowrap { white-space: nowrap; }
+  td:nth-child(2) { font-weight: 500; }
+  td:nth-child(3) { color: var(--mute); font-size: 13px; }
+  td:nth-child(5) { color: var(--mute); font-size: 13px; }
+  tr.formrow td { background: linear-gradient(180deg, #fbf1ee, #fffaf7); padding: 18px 20px 20px; }
+  tr.formrow td > * { animation: rise .45s var(--ease) both; }
+  /* Keep the form in view on phones, where the table scrolls sideways */
+  tr.formrow td > * { position: sticky; left: 20px; max-width: calc(100vw - 72px); }
+  .empty { color: var(--mute); font-style: italic; text-align: center; padding: 22px 16px; }
+  #snapshot td.time { box-shadow: inset 4px 0 0 #d9bcc4; }
+  .nowtag { display: inline-flex; align-items: center; gap: 5px; margin-left: 8px; padding: 2px 8px 2px 6px;
+            border-radius: 999px; background: #fde2e2; color: var(--now); font: 700 10px/1.3 var(--font);
+            letter-spacing: .08em; text-transform: uppercase; white-space: nowrap; vertical-align: 1px; }
+  .nowtag::before { content: ""; width: 6px; height: 6px; border-radius: 50%; background: currentColor;
+                    animation: ping 1.8s ease-out infinite; }
+  .email { color: var(--faint); font-size: 12px; font-weight: 400; }
+  .tag { display: inline-flex; align-items: center; gap: 6px; font-size: 12px; font-weight: 500;
+         padding: 3px 10px; border-radius: 999px; white-space: nowrap; }
+  .tag.av { background: var(--green-bg); color: var(--green); }
+  .tag.av::before { content: ""; width: 6px; height: 6px; border-radius: 50%; background: currentColor; }
+  .tag.na { color: var(--faint); background: var(--soft); }
+  .tight { display: flex; gap: 6px; }
+  .namelist { max-height: 240px; overflow-y: auto; border-radius: 14px; background: var(--soft);
+              padding: 8px 14px; margin-top: 10px; font-size: 13px; }
+  .namelist div { padding: 5px 0; border-bottom: 1px solid var(--line); }
+  .namelist div:last-child { border-bottom: 0; }
+
+  /* Key under the live list */
+  .legend { display: flex; flex-wrap: wrap; gap: 6px 16px; margin: 14px 4px 0; font-size: 12px; color: var(--mute); }
+  .legend span { display: inline-flex; align-items: center; gap: 7px; }
+  .legend span::before { content: ""; width: 4px; height: 14px; border-radius: 4px; background: var(--c); }
+  #live:empty + .legend { display: none; }
+  .foot { color: var(--faint); font-size: 12px; text-align: right; margin: 18px 4px 0; }
+
+  /* ---------- credit */
+  .credit { display: flex; align-items: center; gap: 14px; margin-top: 36px; padding: 18px 20px;
+            border-radius: 20px; background: rgba(255,255,255,.55); box-shadow: inset 0 0 0 1px var(--line);
+            color: var(--mute); font-size: 12.5px; line-height: 1.55; }
+  .credit .crest { width: 38px; height: 38px; animation: none; }
+  .credit b { color: var(--maroon-2); font-weight: 600; }
+  .credit .terms { margin-top: 4px; font-size: 11.5px; color: var(--faint); }
+
+  /* ---------- admin */
+  /* Admin controls wear slate blue, not the society maroon, so they never pass
+     for something members can do. */
+  :root { --adm: #2b3a5c; --adm-2: #1f2b45; --adm-soft: #eef1f8; --adm-line: #cdd5e6; }
+  .adm-tag { display: inline-flex; align-items: center; gap: 5px; font: 700 10px/1 var(--font); letter-spacing: .12em;
+             text-transform: uppercase; color: #fff; background: var(--adm); padding: 5px 8px; border-radius: 6px; }
+  .adm-tag::before { content: "⚙"; font-size: 11px; letter-spacing: 0; }
+  button.adm { color: var(--adm); background: #fff; box-shadow: inset 0 0 0 1px var(--adm-line); }
+  button.adm:hover { background: #f6f8fc; box-shadow: inset 0 0 0 1px #aebbd6, 0 6px 14px -8px rgba(31,43,69,.35); }
+  button.adm.primary { color: #fff; background: linear-gradient(180deg, #3a4c74, var(--adm) 55%, var(--adm-2));
+                       box-shadow: inset 0 1px 0 rgba(255,255,255,.15), 0 8px 18px -10px rgba(31,43,69,.8); }
+  button.adm.danger { color: #b3263e; }
+  button.adm.danger:hover { background: var(--red-bg); }
+  #admin { background: linear-gradient(180deg, #f3f5fb, #fbfcfe); box-shadow: inset 0 0 0 1px var(--adm-line), var(--shadow); }
+  #admin h2 { color: var(--adm-2); display: flex; align-items: center; gap: 10px; }
+  #admin h3 { color: var(--adm-2); border-top-color: var(--adm-line); }
+  #admin input:focus { box-shadow: inset 0 0 0 1.5px var(--adm), 0 0 0 4px rgba(43,58,92,.14); }
+  .pill.admin { background: var(--adm); }
+
+
+  tr.formrow.adm td { background: linear-gradient(180deg, #eef1f8, #f8f9fd); }
+  th.adm-col { color: var(--adm); background: #eef1f8; }
+  tbody td.adm-col { background: #f7f9fd; box-shadow: inset 1px 0 0 var(--adm-line); }
+
+  /* ---------- motion */
+  main > * { animation: rise .6s var(--ease) both; }
+  main > :nth-child(2) { animation-delay: .06s; }
+  main > :nth-child(3) { animation-delay: .1s; }
+  main > :nth-child(4) { animation-delay: .14s; }
+  main > :nth-child(5) { animation-delay: .18s; }
+  main > :nth-child(6) { animation-delay: .22s; }
+  main > :nth-child(n+7) { animation-delay: .26s; }
+  @keyframes rise { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: none; } }
+  @keyframes drop { from { opacity: 0; transform: translateY(-100%); } to { opacity: 1; transform: none; } }
+  @keyframes toast { from { opacity: 0; transform: translateY(-6px) scale(.98); } to { opacity: 1; transform: none; } }
+  @keyframes crest { from { opacity: 0; transform: rotate(-90deg) scale(.6); } to { opacity: 1; transform: none; } }
+  @keyframes ping { 0% { box-shadow: 0 0 0 0 rgba(209,52,63,.55); } 80%, 100% { box-shadow: 0 0 0 7px rgba(209,52,63,0); } }
+  @media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after { animation: none !important; transition: none !important; }
+  }
+
+  @media (max-width: 640px) {
+    main { padding-top: 18px; }
+    .crest { width: 36px; height: 36px; }
+    .brand small { display: none; }
+    .brand strong { font-size: 17px; }
+    .who { font-size: 12px; }
+    .card { padding: 18px; border-radius: 18px; }
+    #login { grid-template-columns: minmax(0,1fr); }
+    #login > * { grid-column: 1; margin-left: 20px; margin-right: 20px; }
+    #login > :first-child { margin-top: 20px; }
+    #login > :last-child { margin-bottom: 22px; }
+    #login::before { grid-row: auto; min-height: 120px; padding: 20px; font-size: 19px; }
+    #login::after { top: 20px; left: 20px; }
+    #mine .big { font-size: 26px; }
+    .section-head .title { font-size: 22px; }
+    th, td { padding: 10px 12px; }
+  }
+</style>
+
+<style>
+  a.homelink { flex: none; font-size: 12.5px; font-weight: 600; color: var(--maroon); text-decoration: none;
+               padding: 7px 12px 7px 10px; border-radius: 999px; background: #fff;
+               box-shadow: inset 0 0 0 1px var(--line); }
+  a.homelink:hover { background: var(--rose-soft); }
+</style>
+</head>
+<body>
+<header class="appbar">
+  <div class="bar">
+    <a class="homelink" href="./">‹ Home</a>
+    <div class="crest" role="img" aria-label="JGU Music Society crest"></div>
+    <div class="brand"><small>JGU Music Society</small><strong>Slot Booking</strong></div>
+    <span class="pill">TEST</span><span id="adminpill" class="pill admin" hidden>ADMIN</span>
+    <span class="who" id="who"></span>
+  </div>
+</header>
+<main>
+  <div id="msg" class="msg" hidden></div>
+  <section id="login" class="card" hidden></section>
+  <section id="closed" class="card note" hidden>Booking opens at <b>6:00 PM</b>. You can see the slots now, but not book yet.</section>
+  <section id="mine" class="card" hidden></section>
+  <section id="live"></section>
+  <div class="legend" aria-hidden="true">
+    <span style="--c:#3aa070">Available</span><span style="--c:var(--maroon)">Booked</span>
+    <span style="--c:var(--rose)">Yours</span><span style="--c:var(--amber)">Happening now</span>
+    <span style="--c:#dccfcc">Not open</span>
+  </div>
+  <section id="snapshot" hidden></section>
+  <section id="admin" class="card" hidden></section>
+  <p class="foot" id="foot">Loading…</p>
+  <footer class="credit">
+    <div class="crest" aria-hidden="true"></div>
+    <div>
+      Slot Booking © 2026 <b>Eash Goyal</b> (24014376) and <b>Eashan Goyal</b> (24014377), LLB (Hons) 2024,
+      Jindal Global Law School. All rights reserved.
+      <div class="terms">Made available to the JGU Music Society for its use; ownership is not transferred. Copying, modifying or redistributing it without the authors’ written permission is prohibited.</div>
+    </div>
+  </footer>
+</main>
+<script>
+  // Same shape as google.script.run, so the page code is identical in both places.
+  window.google = { script: { run: (function runner(ok, fail) {
+    return new Proxy({}, { get: function(_, name) {
+      if (name === 'withSuccessHandler') return function(f) { return runner(f, fail); };
+      if (name === 'withFailureHandler') return function(f) { return runner(ok, f); };
+      return function() {
+        // text/plain keeps this a simple request, which Apps Script can answer.
+        fetch("https://script.google.com/macros/s/AKfycbzzuH514_l1jfvyBq7S9EMEIVIAhCsNsLshyGdXpA__aDn_vvoWQwBm63CPK95S4c5sww/exec", { method: 'POST', headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+              body: JSON.stringify({ fn: name, args: Array.prototype.slice.call(arguments) }) })
+          .then(function(r) { return r.json(); })
+          .then(function(res) {
+            if (res.ok) { if (ok) ok(res.result); } else if (fail) fail(new Error(res.error));
+          }, function() {
+            if (fail) fail(new Error('Couldn’t reach the server. Check your connection and try again.'));
+          });
+      };
+    }});
+  })() } };
+</script>
+<script>
+  var TOKEN_KEY = 'sb_test_token';
+  var POLL_MS = 8000;   // Apps Script can't push; ~8 s is as fast as is kind to the quotas
+  var TZ = 'Asia/Kolkata';
+
+  var canRemember = probeStorage();
+  var token = loadToken();
+  var state = null;
+  var busy = false;
+  var lastPoll = 0;
+
+  // Everything anyone types lives here, not in the inputs, so a redraw never
+  // loses it.
+  var login = { step: 'email', email: '', pin: '', pin2: '' };
+  var formFor = null;                           // slot id with the booking form open
+  var bookDraft = { attendees: '', isPrivate: false };
+  var editing = false;                          // "Your slot" edit form open
+  var editDraft = { attendees: '', isPrivate: false };
+  var cancelArmed = false;                      // two-tap confirms; confirm() is often blocked in embeds
+  var adminEditFor = null;                      // slot id an admin is editing
+  var adminDraft = { attendees: '', isPrivate: false };
+  var adminArmed = null;                        // slot id awaiting a second tap to cancel
+  var dailyArmed = false;
+  var clearArmed = false;
+  var adminEmail = '';
+  var noPin = null;                             // result of "members without a PIN"
+
+  function probeStorage() {
+    try { localStorage.setItem('sb_probe', '1'); localStorage.removeItem('sb_probe'); return true; }
+    catch (e) { return false; }
+  }
+  function loadToken() { try { return localStorage.getItem(TOKEN_KEY) || ''; } catch (e) { return ''; } }
+  function saveToken(t) {
+    token = t || '';
+    try { t ? localStorage.setItem(TOKEN_KEY, t) : localStorage.removeItem(TOKEN_KEY); } catch (e) {}
+  }
+
+  /* ---------------------------------------------------------------- server */
+
+  // After these fail, the page is usually behind ("someone just took that
+  // slot"), so it catches up at once instead of waiting for the next poll.
+  var RESYNC_ON_ERROR = { bookSlot: 1, updateBooking: 1, cancelSlot: 1,
+                          adminUpdate: 1, adminCancel: 1, adminSetOpen: 1,
+                          adminSetLayout: 1, adminClearAll: 1 };
+
+  function call(fn, args, onOk, quiet) {
+    if (!quiet) { busy = true; render(); }
+    var runner = google.script.run
+      .withSuccessHandler(function(res) { if (!quiet) busy = false; onOk(res); })
+      .withFailureHandler(function(err) {
+        if (!quiet) busy = false;
+        // Apps Script hands errors over as "Error: <message>". Strip that, or
+        // the AUTH: check below never matches and an expired login sticks.
+        var text = ((err && err.message) || String(err)).replace(/^Error:\s*/, '');
+        var loggedOut = text.indexOf('AUTH:') === 0;
+        if (loggedOut) { saveToken(''); text = text.slice(5).trim(); if (state) state.me = null; }
+        if (!quiet) show(text, true);
+        // A failed background poll changes nothing on screen, so it mustn't redraw.
+        if (!quiet || loggedOut) render();
+        if (RESYNC_ON_ERROR[fn]) refresh(true);
+      });
+    runner[fn].apply(runner, args);
+  }
+
+  /** Admin calls answer with { message, state } or { message }. */
+  function adminCall(fn, args, after) {
+    call(fn, [token].concat(args), function(res) {
+      if (after) after(res);
+      if (res.message) show(res.message);
+      if (res.state) applyState(res.state, false); else render();
+    });
+  }
+
+  function refresh(quiet) {
+    lastPoll = Date.now();
+    call('getState', [token], function(s) { applyState(s, quiet); }, quiet);
+  }
+
+  // Background polls only redraw parts with nothing being typed in them. A
+  // full redraw while someone types would move their cursor and close the
+  // keyboard on a phone.
+  function applyState(s, fromPoll) {
+    var hadMe = !!(state && state.me);
+    state = s;
+    if (!s.me && token) saveToken('');
+    if (fromPoll && hadMe === !!s.me) renderLive(); else render();
+  }
+
+  function poll() {
+    if (document.hidden || busy || Date.now() - lastPoll < 2000) return;
+    refresh(true);
+  }
+
+  /* ---------------------------------------------------------------- render */
+
+  function render() {
+    renderWho(); renderLogin(); renderClosed(); renderMine();
+    renderLiveTable(); renderSnapshot(); renderAdmin(); renderFoot();
+  }
+
+  function renderLive() {
+    renderWho(); renderClosed(); renderSnapshot(); renderFoot();
+    if (!editing) renderMine();
+    if (formFor) {
+      var target = slotById(formFor);
+      if (!target || target.status !== 'Available') {
+        formFor = null;
+        show('Someone just took ' + (target ? target.time : 'that slot') + '. Pick another.', true);
+        renderLiveTable();
+      }
+      return;   // otherwise leave the table alone until the form is done
+    }
+    if (!adminEditFor) renderLiveTable();
+  }
+
+  function isAdmin() { return !!(state && state.me && state.me.isAdmin); }
+
+  function renderWho() {
+    var who = document.getElementById('who');
+    who.textContent = '';
+    document.getElementById('adminpill').hidden = !isAdmin();
+    if (!state || !state.me) return;
+    who.appendChild(document.createTextNode(state.me.name));
+    who.appendChild(el('button', { 'class': 'link', text: 'Log out', onclick: function() {
+      saveToken(''); state.me = null; formFor = null; editing = false; adminEditFor = null;
+      noPin = null; show(''); render();
+    }}));
+  }
+
+  function renderClosed() {
+    document.getElementById('closed').hidden = !(state && state.windowEnforced && !state.open);
+  }
+
+  function renderFoot() {
+    document.getElementById('foot').textContent = state
+      ? (state.windowEnforced ? '' : 'Booking window switched off · ')
+        + 'Updated ' + fmtTime(new Date().toISOString())
+      : 'Loading…';
+  }
+
+  function renderLogin() {
+    var box = document.getElementById('login');
+    box.hidden = !state || !!state.me;
+    if (box.hidden) return;
+    box.textContent = '';
+    box.appendChild(el('h2', { text: 'Log in to book' }));
+
+    var back = el('button', { 'class': 'link', text: 'Use a different email', onclick: function() {
+      login = { step: 'email', email: login.email, pin: '', pin2: '' }; show(''); render();
+    }});
+
+    if (login.step === 'email') {
+      var email = el('input', { type: 'text', placeholder: 'yourname@jgu.edu.in or your first name',
+                                autocomplete: 'username', autocapitalize: 'none', value: login.email });
+      email.oninput = function() { login.email = email.value; };
+      var next = function() {
+        login.email = login.email.trim();
+        call('startLogin', [login.email], function(res) {
+          login.step = res.hasPin ? 'pin' : 'set';
+          login.label = res.name || login.email;
+          login.pin = ''; login.pin2 = '';
+          show(''); render();
+        });
+      };
+      email.onkeydown = function(e) { if (e.key === 'Enter') next(); };
+      box.appendChild(el('label', { text: 'JGU email or first name' }));
+      box.appendChild(email);
+      box.appendChild(el('div', { 'class': 'actions' }, [
+        el('button', { 'class': 'primary', text: 'Continue', disabled: busy, onclick: next })
+      ]));
+
+    } else if (login.step === 'set') {
+      var pin = pinInput('new-password', 'pin');
+      var pin2 = pinInput('new-password', 'pin2');
+      var save = function() {
+        if (login.pin !== login.pin2) { show('The two PINs don’t match.', true); return; }
+        call('setPin', [login.email, login.pin], loggedIn);
+      };
+      pin2.onkeydown = function(e) { if (e.key === 'Enter') save(); };
+      box.appendChild(el('div', { text: 'First time here — choose a 4-digit PIN for ' + login.email + '.' }));
+      box.appendChild(el('div', { 'class': 'hint',
+        text: 'You’ll use it to log in on any other device. Keep it to yourself. ' +
+              'Avoid 1234, 0000 and similar — they’re not allowed.' }));
+      box.appendChild(el('label', { text: 'Choose PIN' }));  box.appendChild(pin);
+      box.appendChild(el('label', { text: 'Type it again' })); box.appendChild(pin2);
+      box.appendChild(el('div', { 'class': 'actions' }, [
+        el('button', { 'class': 'primary', text: 'Set PIN and log in', disabled: busy, onclick: save }), back
+      ]));
+      setTimeout(function() { if (!login.pin) pin.focus(); }, 0);
+
+    } else {
+      var entry = pinInput('current-password', 'pin');
+      var go = function() { call('loginWithPin', [login.email, login.pin], loggedIn); };
+      entry.onkeydown = function(e) { if (e.key === 'Enter') go(); };
+      box.appendChild(el('label', { text: 'PIN for ' + login.label }));
+      box.appendChild(entry);
+      box.appendChild(el('div', { 'class': 'actions' }, [
+        el('button', { 'class': 'primary', text: 'Log in', disabled: busy, onclick: go }), back
+      ]));
+      box.appendChild(el('div', { 'class': 'hint', text: 'Forgot your PIN? Ask an admin to reset it.' }));
+      setTimeout(function() { if (!login.pin) entry.focus(); }, 0);
+    }
+
+    box.appendChild(el('div', { 'class': 'hint', text: canRemember
+      ? 'This device will keep you logged in for about a semester.'
+      : 'This browser can’t remember your login, so you’ll enter your PIN each visit.' }));
+  }
+
+  // Masked 4-digit field bound to login[field]. The autocomplete hint lets a
+  // phone's password manager offer to save the PIN.
+  function pinInput(autocomplete, field) {
+    var input = el('input', { type: 'password', inputmode: 'numeric', pattern: '[0-9]*',
+                              maxlength: '4', autocomplete: autocomplete, placeholder: '••••',
+                              value: login[field] });
+    input.oninput = function() { input.value = input.value.replace(/\D/g, ''); login[field] = input.value; };
+    return input;
+  }
+
+  function loggedIn(res) {
+    saveToken(res.token);
+    login = { step: 'email', email: '', pin: '', pin2: '' };
+    show('');
+    applyState(res.state, false);
+  }
+
+  function renderMine() {
+    var box = document.getElementById('mine');
+    var slot = mySlot();
+    box.hidden = !slot;
+    if (!slot) { editing = false; return; }
+    box.textContent = '';
+    box.appendChild(el('h2', { text: 'Your slot · ' + fmtDay(state.liveDate) }));
+    box.appendChild(el('div', { 'class': 'big', text: slot.time }));
+
+    if (editing) {
+      box.appendChild(draftFields(editDraft));
+      box.appendChild(el('div', { 'class': 'actions' }, [
+        el('button', { 'class': 'primary', text: 'Save', disabled: busy, onclick: function() {
+          call('updateBooking', [token, slot.id, editDraft.attendees, editDraft.isPrivate], function(s) {
+            editing = false; show('Saved.'); applyState(s, false);
+          });
+        }}),
+        el('button', { text: 'Never mind', onclick: function() { editing = false; renderMine(); } })
+      ]));
+      return;
+    }
+
+    box.appendChild(el('div', { 'class': 'hint',
+      text: (slot.attendees ? 'Attendees: ' + slot.attendees : 'No attendees added yet')
+            + (slot.isPrivate ? ' · 🔒 Private' : '') }));
+    box.appendChild(el('div', { 'class': 'actions' }, [
+      el('button', { text: 'Edit attendees', disabled: busy, onclick: function() {
+        editing = true; cancelArmed = false;
+        editDraft = { attendees: slot.attendees || '', isPrivate: !!slot.isPrivate };
+        renderMine();
+      }}),
+      el('button', {
+        'class': 'danger', disabled: busy,
+        text: cancelArmed ? 'Tap again to cancel' : 'Cancel booking',
+        onclick: function() {
+          if (!cancelArmed) {
+            cancelArmed = true; renderMine();
+            setTimeout(function() { cancelArmed = false; if (!editing) renderMine(); }, 4000);
+            return;
+          }
+          cancelArmed = false;
+          call('cancelSlot', [token, slot.id], function(s) { show('Booking cancelled.'); applyState(s, false); });
+        }
+      })
+    ]));
+  }
+
+  /* --------------------------------------------------------------- tables */
+
+  function renderLiveTable() {
+    var box = document.getElementById('live');
+    box.textContent = '';
+    if (!state) return;
+    box.appendChild(el('div', { 'class': 'section-head' }, [
+      el('span', { 'class': 'title', text: 'Slots for ' + fmtDay(state.liveDate) }),
+      el('span', { 'class': 'sub', text: 'Booking for this day opens at 6:00 PM the day before (test timing)' })
+    ]));
+    box.appendChild(slotTable(state.slots, true));
+  }
+
+  function renderSnapshot() {
+    var box = document.getElementById('snapshot');
+    var snap = state && state.snapshot;
+    box.hidden = !snap;
+    box.textContent = '';
+    if (!snap) return;
+    box.appendChild(el('div', { 'class': 'break', text: 'Previous day' }));
+    box.appendChild(el('div', { 'class': 'section-head' }, [
+      el('span', { 'class': 'title', text: fmtDay(snap.forDate) + ' — final' }),
+      el('span', { 'class': 'sub', text: 'Late-night slots are still on · shown until 1:00 AM' })
+    ]));
+    box.appendChild(slotTable(snap.rows, false));
+  }
+
+  // One table shape for both sections. Only the live one has Book buttons,
+  // forms and the admin column; the previous day is read-only.
+  function slotTable(rows, live) {
+    var adminCol = live && isAdmin();
+    var cols = adminCol ? 6 : 5;
+    var head = ['Time Slot', 'Booked By', 'Booked At', 'Attendees', 'Private'];
+    if (adminCol) head.push('⚙ Admin');
+
+    var body = el('tbody');
+    var canBook = live && !!(state.me) && state.open && !mySlot();
+
+    if (!rows.length) {
+      body.appendChild(el('tr', {}, [el('td', { colspan: String(cols), 'class': 'empty',
+        text: live ? 'No slots are open for this day.' : 'No bookings that day.' })]));
+    }
+
+    rows.forEach(function(s) {
+      var booked = s.status === 'Booked';
+
+      var timeCell = el('td', { 'class': 'time' }, [
+        document.createTextNode(s.time),
+        s.now ? el('span', { 'class': 'nowtag', text: 'Now' }) : null
+      ]);
+
+      var who;
+      if (booked) {
+        who = el('div', {}, [
+          document.createTextNode(s.name),
+          s.email ? el('div', { 'class': 'email', text: s.email }) : null
+        ]);
+      } else if (s.status === 'Available' && canBook) {
+        who = el('button', { 'class': 'primary small', text: 'Book', disabled: busy, onclick: function() {
+          formFor = formFor === s.id ? null : s.id;
+          bookDraft = { attendees: '', isPrivate: false };
+          adminEditFor = null; show(''); renderLiveTable();
+        }});
+      } else if (s.status === 'Available') {
+        who = el('span', { 'class': 'tag av', text: 'Available' });
+      } else {
+        who = el('span', { 'class': 'tag na', text: 'Not open' });
+      }
+
+      var cells = [
+        timeCell,
+        el('td', {}, [who]),
+        cell(booked, booked ? fmtBookedAt(s.bookedAt) : '', 'nowrap'),
+        cell(booked, s.attendees),
+        cell(booked, s.isPrivate ? '🔒 Private' : '', 'nowrap')
+      ];
+      if (adminCol) cells.push(el('td', { 'class': 'adm-col' }, [adminActions(s)]));
+
+      var cls = (s.mine ? 'mine ' : '') + (s.now ? 'now' : '');
+      body.appendChild(el('tr', { 'class': cls.trim() }, cells));
+
+      if (live && formFor === s.id && canBook) body.appendChild(bookFormRow(s, cols));
+      if (live && adminEditFor === s.id) body.appendChild(adminEditRow(s, cols));
+    });
+
+    var table = el('table', {}, [
+      el('thead', {}, [el('tr', {}, head.map(function(h) {
+        return el('th', h === '⚙ Admin' ? { 'class': 'adm-col', text: h } : { text: h });
+      }))]),
+      body
+    ]);
+    return el('div', { 'class': 'tablewrap' }, [table]);
+  }
+
+  // Booked rows show a dash for an empty value; free rows stay blank.
+  function cell(booked, value, cls) {
+    if (value) return el('td', cls ? { 'class': cls, text: value } : { text: value });
+    return el('td', booked ? { 'class': 'dash', text: '—' } : {});
+  }
+
+  function bookFormRow(slot, cols) {
+    return el('tr', { 'class': 'formrow' }, [
+      el('td', { colspan: String(cols) }, [
+        el('div', { 'class': 'big', text: 'Book ' + slot.time + ' · ' + fmtDay(state.liveDate) }),
+        draftFields(bookDraft),
+        el('div', { 'class': 'actions' }, [
+          el('button', { 'class': 'primary', text: 'Confirm booking', disabled: busy, onclick: function() {
+            call('bookSlot', [token, slot.id, bookDraft.attendees, bookDraft.isPrivate], function(s) {
+              formFor = null; show('Booked ' + slot.time + '.'); applyState(s, false);
+            });
+          }}),
+          el('button', { text: 'Never mind', onclick: function() { formFor = null; renderLiveTable(); } })
+        ])
+      ])
+    ]);
+  }
+
+  // Attendees + private, bound to a draft object so typing survives redraws.
+  function draftFields(draft) {
+    var attendees = el('input', { type: 'text', maxlength: '200',
+                                  placeholder: 'Who’s coming? (optional, can add later)', value: draft.attendees });
+    attendees.oninput = function() { draft.attendees = attendees.value; };
+    var priv = el('input', { type: 'checkbox', checked: draft.isPrivate });
+    priv.onchange = function() { draft.isPrivate = priv.checked; };
+    return el('div', {}, [
+      el('label', { text: 'Attendees' }), attendees,
+      el('label', { 'class': 'check' }, [priv, document.createTextNode('Private session')])
+    ]);
+  }
+
+  /* ----------------------------------------------------------------- admin */
+
+  function adminActions(s) {
+    if (s.status === 'Booked') {
+      return el('div', { 'class': 'tight' }, [
+        el('button', { 'class': 'small adm', text: 'Edit', disabled: busy, onclick: function() {
+          adminEditFor = adminEditFor === s.id ? null : s.id;
+          adminDraft = { attendees: s.attendees || '', isPrivate: !!s.isPrivate };
+          formFor = null; renderLiveTable();
+        }}),
+        el('button', { 'class': 'small adm danger', disabled: busy,
+          text: adminArmed === s.id ? 'Tap again' : 'Cancel',
+          onclick: function() {
+            if (adminArmed !== s.id) {
+              adminArmed = s.id; renderLiveTable();
+              setTimeout(function() {
+                if (adminArmed === s.id) { adminArmed = null; if (!formFor && !adminEditFor) renderLiveTable(); }
+              }, 4000);
+              return;
+            }
+            adminArmed = null;
+            adminCall('adminCancel', [s.id]);
+          }})
+      ]);
+    }
+    if (s.status === 'Available') {
+      return el('button', { 'class': 'small adm', text: 'Close', disabled: busy,
+                            onclick: function() { adminCall('adminSetOpen', [s.id, false]); } });
+    }
+    return el('button', { 'class': 'small adm', text: 'Open', disabled: busy,
+                          onclick: function() { adminCall('adminSetOpen', [s.id, true]); } });
+  }
+
+  function adminEditRow(slot, cols) {
+    return el('tr', { 'class': 'formrow adm' }, [
+      el('td', { colspan: String(cols) }, [
+        el('div', { 'class': 'big', text: 'Edit ' + slot.name + '’s booking · ' + slot.time }),
+        draftFields(adminDraft),
+        el('div', { 'class': 'actions' }, [
+          el('button', { 'class': 'adm primary', text: 'Save', disabled: busy, onclick: function() {
+            adminCall('adminUpdate', [slot.id, adminDraft.attendees, adminDraft.isPrivate],
+                      function() { adminEditFor = null; });
+          }}),
+          el('button', { 'class': 'adm', text: 'Never mind', onclick: function() { adminEditFor = null; renderLiveTable(); } })
+        ])
+      ])
+    ]);
+  }
+
+  function renderAdmin() {
+    var box = document.getElementById('admin');
+    box.hidden = !isAdmin();
+    if (box.hidden) return;
+    box.textContent = '';
+    box.appendChild(el('h2', {}, [el('span', { 'class': 'adm-tag', text: 'Admin' }), document.createTextNode('Slot booking')]));
+
+    // Slot layout: the old Notion admin page's quick buttons
+    box.appendChild(el('h3', { text: 'Slot layout' }));
+    var layouts = state.layouts || [];
+    box.appendChild(el('div', { 'class': 'actions' }, layouts.map(function(l) {
+      return el('button', { 'class': 'adm' + (l.active ? ' primary' : ''), text: l.label, disabled: busy,
+                            onclick: function() { adminCall('adminSetLayout', [l.group]); } });
+    })));
+    var current = layouts.filter(function(l) { return l.active; })[0];
+    box.appendChild(el('div', { 'class': 'hint', text:
+      (current ? 'Now: ' + current.label + '. '
+        : state.slots.some(function(s) { return s.status !== 'NA'; })
+          ? 'Now: custom, with slots opened or closed by hand. ' : 'Now: every slot is closed. ')
+      + 'A layout opens its slots and closes the rest. Bookings and blocks outside it must be cleared first, '
+      + 'so switch before booking opens at 6:00 PM.' }));
+
+    // Clear and close all: cancels everything and shows members no slots
+    box.appendChild(el('h3', { text: 'Clear and close all' }));
+    box.appendChild(el('div', { 'class': 'actions' }, [
+      el('button', { 'class': 'adm danger', disabled: busy,
+        text: clearArmed ? 'Tap again — this cancels every booking and closes every slot' : 'Clear and close all',
+        onclick: function() {
+          if (!clearArmed) {
+            clearArmed = true; renderAdmin();
+            setTimeout(function() { clearArmed = false; renderAdmin(); }, 5000);
+            return;
+          }
+          clearArmed = false;
+          adminCall('adminClearAll', []);
+        }})
+    ]));
+    box.appendChild(el('div', { 'class': 'hint',
+      text: 'Cancels every booking and block and closes every slot, so members see none until you pick a layout. '
+            + 'Nothing is archived; the cancelled bookings are listed in the admin log.' }));
+
+
+    // Nightly snapshot + reset
+    box.appendChild(el('h3', { text: 'Nightly snapshot + reset' }));
+    var d = state.daily;
+    box.appendChild(el('div', { 'class': 'hint' + (d && !d.ok ? ' bad' : ''), text: d
+      ? (d.ok ? 'Last run ' : 'Last run FAILED ') + fmtBookedAt(new Date(d.at).toISOString())
+        + ' (' + (d.by === 'schedule' ? 'scheduled' : d.by) + '): ' + d.message
+      : 'Hasn’t run yet. It runs by itself between 5:30 and 5:40 PM (test timing).' }));
+    box.appendChild(el('div', { 'class': 'actions' }, [
+      el('button', { 'class': 'adm danger', disabled: busy,
+        text: dailyArmed ? 'Tap again — this clears every live booking' : 'Run snapshot + reset now',
+        onclick: function() {
+          if (!dailyArmed) {
+            dailyArmed = true; renderAdmin();
+            setTimeout(function() { dailyArmed = false; renderAdmin(); }, 5000);
+            return;
+          }
+          dailyArmed = false;
+          adminCall('adminRunDaily', []);
+        }})
+    ]));
+
+    // PIN help
+    box.appendChild(el('h3', { text: 'PIN help' }));
+    var input = el('input', { type: 'email', placeholder: 'member@jgu.edu.in', value: adminEmail });
+    input.oninput = function() { adminEmail = input.value; };
+    box.appendChild(el('div', { 'class': 'inline' }, [
+      input,
+      el('button', { 'class': 'adm', text: 'Reset PIN', disabled: busy,
+                     onclick: function() { adminCall('adminResetPin', [adminEmail]); } }),
+      el('button', { 'class': 'adm', text: 'Unlock', disabled: busy,
+                     onclick: function() { adminCall('adminUnlock', [adminEmail]); } })
+    ]));
+    box.appendChild(el('div', { 'class': 'hint',
+      text: 'Reset: they choose a new PIN at their next login. Unlock: lifts the 30-minute lock after 5 wrong tries.' }));
+
+    // Members without a PIN
+    box.appendChild(el('h3', { text: 'Members without a PIN' }));
+    box.appendChild(el('div', { 'class': 'actions' }, [
+      el('button', { 'class': 'adm', text: noPin ? 'Refresh list' : 'Show list', disabled: busy, onclick: function() {
+        adminCall('adminMembersWithoutPin', [], function(res) { noPin = res; });
+      }})
+    ]));
+    if (noPin) {
+      box.appendChild(el('div', { 'class': 'hint',
+        text: noPin.withPin + ' of ' + noPin.total + ' active members have set a PIN. Not yet: '
+              + noPin.missing.length + '.' }));
+      if (noPin.missing.length) {
+        box.appendChild(el('div', { 'class': 'namelist' }, noPin.missing.map(function(m) {
+          return el('div', {}, [document.createTextNode(m.name + ' '), el('span', { 'class': 'email', text: m.email })]);
+        })));
+      }
+    }
+  }
+
+  /* --------------------------------------------------------------- helpers */
+
+  function show(text, isError) {
+    var box = document.getElementById('msg');
+    box.textContent = text || '';
+    box.className = 'msg' + (isError ? ' err' : '');
+    box.hidden = !text;
+  }
+
+  // Build DOM with textContent only — names and attendees are typed by members.
+  function el(tag, attrs, kids) {
+    var node = document.createElement(tag);
+    Object.keys(attrs || {}).forEach(function(k) {
+      if (k === 'text') node.textContent = attrs[k];
+      else if (k === 'onclick') node.onclick = attrs[k];
+      else if (k === 'disabled' || k === 'checked' || k === 'value') node[k] = attrs[k];
+      else node.setAttribute(k, attrs[k]);
+    });
+    (kids || []).forEach(function(c) { if (c) node.appendChild(c); });
+    return node;
+  }
+
+  function fmtTime(iso) {
+    if (!iso) return '';
+    return new Date(iso).toLocaleTimeString('en-IN', {
+      timeZone: TZ, hour: 'numeric', minute: '2-digit', hour12: true
+    }).toUpperCase();
+  }
+
+  // "26 Oct, 9:31 PM" — most bookings are made the evening before, so the date matters.
+  function fmtBookedAt(iso) {
+    if (!iso) return '';
+    var day = new Date(iso).toLocaleDateString('en-IN', { timeZone: TZ, day: 'numeric', month: 'short' });
+    return day + ', ' + fmtTime(iso);
+  }
+
+  // "Wed, 28 Oct". Noon IST, so the date can't slip across midnight.
+  function fmtDay(dateStr) {
+    if (!dateStr) return '';
+    return new Date(dateStr + 'T12:00:00+05:30').toLocaleDateString('en-IN', {
+      timeZone: TZ, weekday: 'short', day: 'numeric', month: 'short'
+    });
+  }
+
+  function mySlot() { return state && state.slots.filter(function(s) { return s.mine; })[0]; }
+  function slotById(id) { return state && state.slots.filter(function(s) { return s.id === id; })[0]; }
+
+  /* ----------------------------------------------------------------- start */
+
+  refresh(false);
+  setInterval(poll, POLL_MS);
+  // Catch up the moment someone comes back to the tab, not on the next tick.
+  document.addEventListener('visibilitychange', poll);
+  window.addEventListener('focus', poll);
+</script>
+</body>
+</html>
