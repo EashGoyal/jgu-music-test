@@ -332,6 +332,11 @@
   .status.mine { color: var(--rose); }
   .status.quiet { color: var(--mute); font-weight: 500; }
 
+  .tiles a.small-tile { min-height: 0; padding: 18px 22px; }
+  .small-tile h3 { margin: 0; padding: 0; border: 0; font: 600 16px/1.25 var(--font); color: var(--maroon-2); }
+  .small-tile p { margin-top: 4px; }
+  #members-hint { margin: 0 2px 18px; }
+
   .list { padding: 6px 0; }
   .row { display: flex; align-items: center; gap: 6px 14px; flex-wrap: wrap; padding: 13px 24px; color: inherit;
          text-decoration: none; border-bottom: 1px solid var(--line); transition: background .2s; }
@@ -391,6 +396,12 @@
       <div class="status quiet" id="event-status"></div>
     </a>
   </section>
+
+  <section id="members" hidden>
+    <div class="section-head"><span class="title">For members</span></div>
+    <div class="tiles" id="member-links"></div>
+  </section>
+  <p class="hint" id="members-hint" hidden>Log in through Slot Booking or Event Registration to see the member links.</p>
 
   <div class="section-head"><span class="title">Upcoming events</span></div>
   <section class="card" style="padding:0;overflow:hidden"><div class="list" id="events"><div class="none">Loading…</div></div></section>
@@ -482,7 +493,23 @@
     google.script.run.withSuccessHandler(onOk).withFailureHandler(function() {})[fn](token);
   }
 
+  function showLinks(links) {
+    var box = document.getElementById('member-links');
+    box.textContent = '';
+    document.getElementById('members').hidden = !links.length;
+    links.forEach(function(l) {
+      box.appendChild(el('a', { 'class': 'card tile small-tile', href: l.url, target: '_blank', rel: 'noopener noreferrer' }, [
+        el('div', { 'class': 'tile-top' }, [
+          el('h3', { text: l.label }), el('span', { 'class': 'go-arrow', 'aria-hidden': 'true', text: '↗' })
+        ]),
+        el('p', { text: l.note })
+      ]));
+    });
+    document.getElementById('members-hint').hidden = !!links.length;
+  }
+
   function load() {
+    ask('getMemberLinks', showLinks);
     ask('getState', function(s) {
       showWho(s.me);
       var mine = s.slots.filter(function(x) { return x.mine; })[0];
